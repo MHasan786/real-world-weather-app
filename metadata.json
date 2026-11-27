@@ -1,0 +1,6 @@
+{
+  "name": "WeatherNow",
+  "description": "Live Global Weather & 5-Day Forecast dashboard with real-time meteorological data, dynamic atmospheric themes, geolocation, and unit conversion.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

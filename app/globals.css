@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: var(--font-display), system-ui, sans-serif;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+/* Dynamic Atmospheric Themes */
+.weather-bg {
+  position: relative;
+  min-height: 100vh;
+  transition: background 800ms cubic-bezier(0.16, 1, 0.3, 1), color 400ms ease;
+}
+
+.theme-default {
+  background: linear-gradient(140deg, #071324 0%, #0f2544 45%, #163e6c 100%);
+  color: #f8fafc;
+}
+
+.theme-clear {
+  background: linear-gradient(140deg, #9a3412 0%, #ea580c 26%, #f59e0b 58%, #0284c7 100%);
+  color: #ffffff;
+}
+
+.theme-clouds {
+  background: linear-gradient(145deg, #1e293b 0%, #334155 46%, #1e3a5f 100%);
+  color: #f8fafc;
+}
+
+.theme-rain {
+  background: linear-gradient(150deg, #061024 0%, #11224d 48%, #1d4ed8 100%);
+  color: #f8fafc;
+}
+
+.theme-snow {
+  background: linear-gradient(145deg, #e0f2fe 0%, #bae6fd 48%, #7dd3fc 100%);
+  color: #0f172a;
+}
+
+.theme-thunderstorm {
+  background: linear-gradient(150deg, #090517 0%, #240d54 52%, #1e1b4b 100%);
+  color: #f8fafc;
+}
+
+.theme-night {
+  background: linear-gradient(150deg, #020617 0%, #111338 50%, #261e5e 100%);
+  color: #f8fafc;
+}
+
+/* Refined Glassmorphism Surfaces with Luminous Top Specular Edge */
+.glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(15, 23, 42, 0.34) 100%
+  );
+  backdrop-filter: blur(22px) saturate(135%);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 24px 56px -18px rgba(2, 6, 23, 0.42);
+}
+
+.theme-snow .glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(240, 249, 255, 0.62) 100%
+  );
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 44px -16px rgba(15, 23, 42, 0.14);
+}
+
+.glass-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(15, 23, 42, 0.18) 100%
+  );
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 12px 28px -14px rgba(2, 6, 23, 0.35);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.glass-card:hover {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(15, 23, 42, 0.2) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 18px 34px -14px rgba(2, 6, 23, 0.45);
+}
+
+.theme-snow .glass-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(240, 249, 255, 0.56) 100%
+  );
+  border: 1px solid rgba(15, 23, 42, 0.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 10px 24px -12px rgba(15, 23, 42, 0.12);
+}
+
+.theme-snow .glass-card:hover {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(240, 249, 255, 0.75) 100%
+  );
+  border-color: rgba(15, 23, 42, 0.22);
+}
+
+/* Compositor-only Atmospheric Keyframes */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes orbDriftOne {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-28px, 22px, 0) scale(1.06);
+  }
+}
+
+@keyframes orbDriftTwo {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(32px, -24px, 0) scale(1.08);
+  }
+}
+
+@keyframes orbDriftThree {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-20px, -18px, 0) scale(1.05);
+  }
+}
+
+@keyframes sunRaysRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sunCoronaPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 0.62;
+  }
+}
+
+@keyframes cloudDrift {
+  0% {
+    transform: translate3d(-45vw, 0, 0);
+  }
+  100% {
+    transform: translate3d(120vw, 0, 0);
+  }
+}
+
+@keyframes rainFall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(12deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-110px, 115vh, 0) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes snowDrift {
+  0% {
+    transform: translate3d(0, -5vh, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate3d(26px, 52vh, 0);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-14px, 108vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes lightningSheet {
+  0%, 88%, 100% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.55;
+  }
+  90.2% {
+    opacity: 0.08;
+  }
+  91.5% {
+    opacity: 0.4;
+  }
+  93.5% {
+    opacity: 0;
+  }
+}
+
+@keyframes radarPing {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.weather-icon-float {
+  animation: floatSlow 4.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.atmosphere-orb-one {
+  animation: orbDriftOne 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.atmosphere-orb-two {
+  animation: orbDriftTwo 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+.atmosphere-orb-three {
+  animation: orbDriftThree 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.sun-rays-spin {
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(254, 240, 138, 0.22) 0deg 14deg,
+    transparent 14deg 36deg
+  );
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.9) 0%, transparent 68%);
+  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.9) 0%, transparent 68%);
+  animation: sunRaysRotate 64s linear infinite;
+  will-change: transform;
+}
+
+.sun-corona-pulse {
+  animation: sunCoronaPulse 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.cloud-drift {
+  animation: cloudDrift 48s linear infinite;
+  will-change: transform;
+}
+
+.rain-streak {
+  animation: rainFall 1s linear infinite;
+  will-change: transform, opacity;
+}
+
+.snow-drift {
+  animation: snowDrift 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.star-twinkle {
+  animation: starTwinkle 3.8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.lightning-flash {
+  animation: lightningSheet 8.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.radar-ping {
+  animation: radarPing 1.9s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.shimmer-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 100%
+  );
+  animation: shimmerSlide 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-icon-float,
+  .atmosphere-orb-one,
+  .atmosphere-orb-two,
+  .atmosphere-orb-three,
+  .sun-rays-spin,
+  .sun-corona-pulse,
+  .cloud-drift,
+  .rain-streak,
+  .snow-drift,
+  .star-twinkle,
+  .lightning-flash,
+  .radar-ping,
+  .shimmer-bar::after {
+    animation: none;
+  }
+
+  .glass-card,
+  .weather-bg {
+    transition: none;
+  }
+}

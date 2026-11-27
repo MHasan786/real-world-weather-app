@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherNow — Live Global Weather &amp; 5-Day Forecast</title>
+    <meta
+      name="description"
+      content="Live Global Weather & 5-Day Forecast application powered by OpenWeatherMap API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="app-body" class="weather-bg theme-default font-sans antialiased flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="w-full pt-5 pb-3 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto glass-panel rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <!-- Logo + Brand Name -->
+          <div class="flex items-center justify-between gap-4 shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0" aria-hidden="true">
+                <svg class="w-5 h-5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v2" />
+                  <path d="m4.93 4.93 1.41 1.41" />
+                  <path d="M20 12h2" />
+                  <path d="m19.07 4.93-1.41 1.41" />
+                  <path d="M15.947 12.65a4 4 0 0 0-5.925-4.128" />
+                  <path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z" />
+                </svg>
+              </div>
+              <span class="font-display text-xl font-bold tracking-tight whitespace-nowrap">WeatherNow</span>
+            </div>
+
+            <div class="flex lg:hidden items-center p-1 rounded-xl border border-white/20 bg-white/10" role="group" aria-label="Temperature unit">
+              <button type="button" id="unit-c-mobile" class="unit-btn unit-btn-active px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" data-unit="C">°C</button>
+              <button type="button" id="unit-f-mobile" class="unit-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" data-unit="F">°F</button>
+            </div>
+          </div>
+
+          <!-- Search Bar -->
+          <form id="search-form" class="flex items-center gap-2 flex-1 max-w-xl w-full" role="search" aria-label="City weather search">
+            <div class="relative flex-1 min-w-0">
+              <label for="city-input" class="sr-only">Search any city</label>
+              <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 opacity-65 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                id="city-input"
+                type="text"
+                placeholder="Search any city worldwide..."
+                autocomplete="off"
+                class="search-input w-full h-11 pl-10 pr-4 rounded-xl border border-white/20 bg-white/10 text-sm font-medium outline-none transition-colors"
+              />
+            </div>
+            <button
+              id="search-button"
+              type="submit"
+              class="h-11 px-4 sm:px-5 rounded-xl bg-white text-slate-900 hover:bg-white/90 text-sm font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              Search
+            </button>
+          </form>
+
+          <!-- Unit Switch & Current Location -->
+          <div class="flex items-center gap-2.5 shrink-0">
+            <div class="hidden lg:flex items-center p-1 rounded-xl border border-white/20 bg-white/10" role="group" aria-label="Temperature unit">
+              <button type="button" id="unit-c-desktop" class="unit-btn unit-btn-active px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" data-unit="C">°C</button>
+              <button type="button" id="unit-f-desktop" class="unit-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" data-unit="F">°F</button>
+            </div>
+
+            <button
+              id="location-button"
+              type="button"
+              class="h-11 px-4 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors flex items-center justify-center gap-2 whitespace-nowrap shrink-0 cursor-pointer w-full sm:w-auto"
+            >
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Use My Location</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Recent Searches -->
+    <nav id="recent-searches-nav" class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-2 hidden" aria-label="Recent searches">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-medium opacity-75 mr-1">Recent:</span>
+        <div id="recent-searches-list" class="flex flex-wrap items-center gap-2"></div>
+        <button id="clear-recent-button" type="button" class="h-8 px-2.5 text-xs font-medium opacity-70 hover:opacity-100 transition-opacity cursor-pointer">
+          Clear
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6">
+      <!-- Inline Error Container -->
+      <div id="error-container" role="alert" class="hidden rounded-2xl px-4 py-3.5 bg-red-950/60 border border-red-400/35 text-red-50 flex items-center justify-between gap-3 backdrop-blur-md">
+        <p id="error-message" class="text-sm font-medium"></p>
+        <button id="dismiss-error-button" type="button" aria-label="Dismiss error" class="p-1 rounded-lg hover:bg-white/10 cursor-pointer shrink-0">✕</button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <section id="loading-container" role="status" aria-live="polite" class="hidden glass-panel rounded-3xl p-10 sm:p-14 flex flex-col items-center justify-center gap-4 text-center">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="font-display text-lg font-semibold">Fetching live weather...</p>
+        <p class="text-sm opacity-75">Retrieving real-time conditions and 5-day forecast</p>
+      </section>
+
+      <!-- Empty State -->
+      <section id="empty-state" class="glass-panel rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto mt-4 sm:mt-8 space-y-6">
+        <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight">
+          Live Global Weather, Wherever You Look
+        </h1>
+        <p class="text-sm sm:text-base opacity-80 max-w-xl mx-auto leading-relaxed">
+          Search any city worldwide or click Use My Location to fetch genuine live conditions and a 5-day forecast from OpenWeatherMap.
+        </p>
+      </section>
+
+      <!-- Current Weather Dashboard -->
+      <section id="weather-dashboard" class="hidden space-y-6 fade-in">
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 lg:p-10">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="space-y-2.5">
+              <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+                <span id="city-name">--</span>
+                <span id="country-code" class="font-medium ml-2 opacity-80"></span>
+              </h1>
+              <p id="local-datetime" class="text-sm sm:text-base font-medium font-mono tabular-nums opacity-80">--</p>
+              <div class="pt-2 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                <span id="current-temp" class="font-display text-6xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight tabular-nums leading-none">--</span>
+                <div class="space-y-0.5">
+                  <p id="feels-like" class="text-sm sm:text-base font-medium tabular-nums opacity-85">Feels like --</p>
+                  <p id="weather-summary" class="text-sm capitalize font-medium opacity-75">--</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-4 shrink-0">
+              <img id="weather-icon" src="" alt="Weather condition icon" class="w-24 h-24 sm:w-32 sm:h-32 object-contain weather-icon-float drop-shadow-md" />
+              <div class="text-left md:text-right">
+                <p id="weather-condition" class="font-display text-xl sm:text-2xl font-semibold">--</p>
+                <p id="weather-description" class="text-sm capitalize opacity-75">--</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Information Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4" aria-label="Atmospheric details">
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Humidity</span>
+            <p id="metric-humidity" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Wind Speed</span>
+            <p id="metric-wind" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Pressure</span>
+            <p id="metric-pressure" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Visibility</span>
+            <p id="metric-visibility" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Sunrise</span>
+            <p id="metric-sunrise" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+          <article class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3">
+            <span class="text-xs font-medium opacity-75">Sunset</span>
+            <p id="metric-sunset" class="font-mono text-lg sm:text-xl font-semibold tabular-nums">--</p>
+          </article>
+        </div>
+
+        <!-- 5-Day Weather Forecast -->
+        <section aria-label="5-Day Weather Forecast" class="space-y-4">
+          <div class="flex items-baseline justify-between gap-4">
+            <h2 class="font-display text-xl sm:text-2xl font-bold tracking-tight">5-Day Forecast</h2>
+            <span class="text-xs sm:text-sm font-medium opacity-70">Daily highs &amp; lows</span>
+          </div>
+          <div id="forecast-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center sm:text-left">
+      <p class="text-xs opacity-60">WeatherNow · Live Global Weather powered by OpenWeatherMap</p>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="error-toast" role="status" aria-live="assertive" class="hidden fixed bottom-5 right-5 z-50 max-w-sm rounded-2xl bg-slate-900/95 text-white border border-white/15 shadow-2xl px-4 py-3 flex items-center gap-3 backdrop-blur-md">
+      <p id="toast-message" class="text-xs sm:text-sm font-medium flex-1"></p>
+      <button id="close-toast-button" type="button" aria-label="Close notification" class="p-1 rounded-lg hover:bg-white/10 cursor-pointer shrink-0">✕</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
